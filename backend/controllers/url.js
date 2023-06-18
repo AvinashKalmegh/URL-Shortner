@@ -11,7 +11,7 @@ const newShortUrl = async(req,res)=>{
     }
 
     const shortId = shortid();
-    const data = await UrlModel.create({
+    await UrlModel.create({
         shortId:shortId,
         redirectUrl : body.url,
         visitHistory: []
@@ -21,5 +21,12 @@ const newShortUrl = async(req,res)=>{
 }
 
 
+const handleGetAnalytics = async(req, res)=>{
+    const shortId = req.params.shortId;
+    const result = await UrlModel.findOne({shortId});
+    return res.json({totalClicks: result.visitHistory.length, analytics: result.visitHistory})
+}
 
-module.exports = {newShortUrl};
+
+
+module.exports = {newShortUrl, handleGetAnalytics};
